@@ -96,6 +96,7 @@ async def verify_certificate(certificate_id: str):
         return HTMLResponse(content=generate_certificate_html(False), status_code=404)
 
 
+
 @app.get("/test", response_class=HTMLResponse)
 async def home():
     return """
