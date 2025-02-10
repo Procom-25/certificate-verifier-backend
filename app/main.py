@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from pymongo import MongoClient
 from pydantic import BaseModel
 import os
@@ -156,3 +156,16 @@ async def custom_404_handler(request, exc):
         </body>
     </html>
     """, status_code=404)
+
+
+
+@app.get("/certificates/all", response_class=JSONResponse)
+async def get_all_certificates():
+    try:
+        certificates = list(collection.find())
+        # Convert ObjectId to string for JSON serialization
+        for cert in certificates:
+            cert["_id"] = str(cert["_id"])
+        return JSONResponse(content={"certificates": certificates}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"status": "failed", "error": str(e)}, status_code=500)
