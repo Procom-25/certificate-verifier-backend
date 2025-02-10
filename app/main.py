@@ -10,10 +10,6 @@ load_dotenv("/app/.env")
 
 app = FastAPI()
 
-static_dir = os.path.join(os.path.dirname(__file__), "..", "static")
-
-app.mount("/static", StaticFiles(directory=static_dir), name="static")
-
 MONGO_URI = os.getenv("MONGODB_URI")
 client = MongoClient(MONGO_URI)
 db = client["certificates"]
@@ -23,8 +19,7 @@ class CertificateResponse(BaseModel):
     is_verified: bool
 
 def generate_certificate_html(verified: bool, certificate=None):
-    verification_status = "Certificate is Verified" if verified else "Certificate is Not Verified"
-    verification_image = "/static/verified.png" if verified else "/static/not_verified.png"
+    verification_status = "Certificate is Verified ✅" if verified else "Certificate is Not Verified ❌"
     details = (
         f"""
         <p><span class="highlight">{certificate['student_name']}</span> participated in the competition 
@@ -81,7 +76,6 @@ def generate_certificate_html(verified: bool, certificate=None):
         <body>
             <div class="container">
                 <div class="content">
-                    <img src="{verification_image}" alt="{verification_status}" class="verified-image">
                     <h1>{verification_status}</h1>
                     <div class="details">
                         {details}
