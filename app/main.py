@@ -6,7 +6,7 @@ from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv("/app/.env")
 
 app = FastAPI()
 
