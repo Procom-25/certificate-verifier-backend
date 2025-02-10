@@ -10,7 +10,9 @@ load_dotenv()
 
 app = FastAPI()
 
-app.mount("/static", StaticFiles(directory="."), name="static")
+static_dir = os.path.join(os.path.dirname(__file__), "..", "static")
+
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 MONGO_URI = os.getenv("MONGODB_URI")
 client = MongoClient(MONGO_URI)
